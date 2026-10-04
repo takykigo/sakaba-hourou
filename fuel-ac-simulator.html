@@ -12,7 +12,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            font-size: 17px; /* スマホ基本文字サイズを大きめに設定 */
+            font-size: 17px;
         }
         /* スライダーを指で操作しやすく拡大 */
         input[type=range] {
@@ -50,7 +50,7 @@
 
     <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
 
-        <!-- ヒーローサマリーカード（大文字化） -->
+        <!-- ヒーローサマリーカード -->
         <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/60 border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl">
             <span class="inline-block text-sm font-black tracking-wider text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-md border border-emerald-700/50 mb-3">
                 エアコンOFF時の推定
@@ -71,8 +71,8 @@
 
             <div class="mt-5 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-slate-900/60 p-4 rounded-2xl">
                 <div>
-                    <span class="text-sm text-slate-400 font-bold block">年間のガソリン代節約額（目安）</span>
-                    <span class="text-xs text-slate-500">※年間1万km・175円/L計算</span>
+                    <span class="text-sm sm:text-base text-slate-400 font-bold block">年間のガソリン代節約額（試算）</span>
+                    <span class="text-xs text-slate-500">※入力された走行距離とガソリン単価で自動計算</span>
                 </div>
                 <div id="displayAnnualSaving" class="text-2xl sm:text-3xl font-black text-amber-400">
                     約 6,150 円/年
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <!-- プリセットボタン（大きく押しやすく） -->
+        <!-- プリセットボタン -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-3">
             <label class="text-base font-extrabold text-white block">
                 ⚡ 条件をワンタップで切り替え
@@ -104,7 +104,7 @@
         <!-- スライダー操作パネル -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-6">
             <h2 class="text-lg font-black text-white flex items-center gap-2 border-b border-slate-800 pb-3">
-                <span>⚙️</span> 数値を微調整する
+                <span>⚙️</span> 燃費とエアコン影響度の微調整
             </h2>
 
             <!-- 現在の燃費スライダー -->
@@ -138,6 +138,37 @@
             </div>
         </div>
 
+        <!-- ★ ガソリン単価・年間走行距離の入力欄（復活＆スマホ向け大型化） ★ -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-4">
+            <h2 class="text-lg font-black text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+                <span>💰</span> 節約試算の設定（入力して再計算）
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- 年間走行距離 -->
+                <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                    <label class="text-sm font-bold text-slate-300 block mb-2">年間走行距離</label>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="inputDistance" value="10000" step="500" inputmode="numeric"
+                               class="w-full bg-slate-800 border-2 border-slate-700 focus:border-emerald-500 rounded-xl px-4 py-3 text-lg font-black text-white outline-none">
+                        <span class="text-base font-bold text-slate-400 min-w-[32px]">km</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">通勤目安: 約10,000km / 週末のみ: 約5,000km</p>
+                </div>
+
+                <!-- ガソリン単価 -->
+                <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                    <label class="text-sm font-bold text-slate-300 block mb-2">ガソリン単価（レギュラー）</label>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="inputGasPrice" value="175" step="1" inputmode="numeric"
+                               class="w-full bg-slate-800 border-2 border-slate-700 focus:border-amber-500 rounded-xl px-4 py-3 text-lg font-black text-white outline-none">
+                        <span class="text-base font-bold text-slate-400 min-w-[40px]">円/L</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">現在の相場に合わせて変更してください</p>
+                </div>
+            </div>
+        </div>
+
         <!-- グラフエリア -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg">
             <h2 class="text-lg font-black text-white mb-2 flex items-center gap-2">
@@ -164,7 +195,7 @@
             </div>
         </div>
 
-        <!-- 解説アコーディオン／見やすいカード -->
+        <!-- 解説カード -->
         <div class="space-y-4">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
                 <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2 mb-3">
@@ -220,7 +251,7 @@
             return baseFuel / factor;
         }
 
-        function calculateAnnualSaving(baseFuel, noAcFuel, distance = 10000, gasPrice = 175) {
+        function calculateAnnualSaving(baseFuel, noAcFuel, distance, gasPrice) {
             const litersWithAc = distance / baseFuel;
             const litersWithoutAc = distance / noAcFuel;
             const diffLiters = litersWithAc - litersWithoutAc;
@@ -230,13 +261,15 @@
         function updateAll() {
             const baseFuel = parseFloat(document.getElementById('inputBaseFuel').value);
             const impact = parseFloat(document.getElementById('inputAcImpact').value);
+            const distance = parseFloat(document.getElementById('inputDistance').value) || 0;
+            const gasPrice = parseFloat(document.getElementById('inputGasPrice').value) || 0;
 
             document.getElementById('valBaseFuel').innerText = baseFuel.toFixed(1);
             document.getElementById('valAcImpact').innerText = impact;
 
             const estimatedNoAc = calculateNoAcFuel(baseFuel, impact);
             const gain = estimatedNoAc - baseFuel;
-            const annualSaving = calculateAnnualSaving(baseFuel, estimatedNoAc);
+            const annualSaving = calculateAnnualSaving(baseFuel, estimatedNoAc, distance, gasPrice);
 
             document.getElementById('displayEstimatedKm').innerText = estimatedNoAc.toFixed(1);
             document.getElementById('displayGainKm').innerText = `+${gain.toFixed(1)} km/L`;
@@ -329,6 +362,7 @@
                 }
             });
 
+            // 入力監視イベント
             document.getElementById('inputBaseFuel').addEventListener('input', updateAll);
             document.getElementById('inputAcImpact').addEventListener('input', () => {
                 document.querySelectorAll('.preset-btn').forEach(btn => {
@@ -338,6 +372,8 @@
                 });
                 updateAll();
             });
+            document.getElementById('inputDistance').addEventListener('input', updateAll);
+            document.getElementById('inputGasPrice').addEventListener('input', updateAll);
 
             updateAll();
         });
